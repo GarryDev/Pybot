@@ -19,13 +19,20 @@ async def on_message(message):
     my_name = ['pybot', 'Pybot']
 
     if any(x in message.content for x in my_name):
+        # switch statements are saved
         if "who is our lord" in message.content:
             await client.send_message(message.channel, '{0.author.mention} OUR LORD AND SAVIOR IS CHIN-CHIN REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!!!!'.format(message))
-        if "thoughts on" in message.content:
+        elif "thoughts on" in message.content:
             result = re.search('thoughts on <@(.*)>', message.content)
             print(message.content)
             print(result.group(1))
             await client.send_message(message.channel, "<@"  + result.group(1) + ">" + "is a cuck")
+        elif "anne" in message.content:
+            try:
+                await client.send_file(message.channel, 'C:\\pybot\\anne_robinson.jpg')
+            except ValueError:
+                print("Could not open C:\\pybot\\anne_robinson.jpg")
+            
 
 @client.event
 async def on_ready():
