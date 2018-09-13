@@ -23,8 +23,6 @@ async def on_message(message):
             await client.send_message(message.channel, '{0.author.mention} OUR LORD AND SAVIOR IS CHIN-CHIN REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!!!!'.format(message))
         elif "thoughts on" in message.content:
             result = re.search('thoughts on <@(.*)>', message.content)
-            print(message.content)
-            print(result.group(1))
             await client.send_message(message.channel, "<@"  + result.group(1) + ">" + " is a cuck")
         elif "anne" in message.content:
             try:
@@ -38,10 +36,7 @@ async def on_message(message):
             await client.send_message(message.channel, 'What the fuck are you on about you absolute unit???')
             print('Could not match responce to:\n' + message.content + '\n')
 
-
     immune = "155863164544614402", "175030721876852736"
-
-    print('author id: ' + message.author.id)
 
     if message.author.id in immune and "!scattertheweak" in message.content:
 
@@ -53,7 +48,6 @@ async def on_message(message):
                 if not isinstance(channel.type, int):
                     if channel.type.value == 2:
                         voice_channels.append(channel)
-                        print('voice channel: ' + channel.name + ' id:' + channel.id)
 
         # copy list so it will not be updated when a user is removed from the voice channel
         static_member_list = message.author.voice.voice_channel.voice_members.copy()
