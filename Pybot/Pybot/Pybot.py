@@ -1,5 +1,6 @@
 # Work with Python 3.6
 import discord
+import random
 import re
 from os import listdir
 
@@ -14,13 +15,7 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('!hello'):
-        msg = 'Hello {0.author.mention}'.format(message)
-        await client.send_message(message.channel, msg)
-
     my_name = ['pybot', 'Pybot', '<@' + client.user.id + '>']
-
-    print('test' + message.content);
 
     if any(x in message.content for x in my_name):
         # switch statements are saved
@@ -42,6 +37,30 @@ async def on_message(message):
         else:
             await client.send_message(message.channel, 'What the fuck are you on about you absolute unit???')
             print('Could not match responce to:\n' + message.content + '\n')
+
+
+    immune = "155863164544614402", "175030721876852736"
+
+    print('author id: ' + message.author.id)
+
+    if message.author.id in immune and "!scattertheweak" in message.content:
+
+        voice_channels = []
+
+        for server in client.servers:
+            for channel in server.channels:
+                # categorys have channel type as a int where as text and voice are an set of string and int [name, value]
+                if not isinstance(channel.type, int):
+                    if channel.type.value == 2:
+                        voice_channels.append(channel)
+                        print('voice channel: ' + channel.name + ' id:' + channel.id)
+
+        # copy list so it will not be updated when a user is removed from the voice channel
+        static_member_list = message.author.voice.voice_channel.voice_members.copy()
+
+        for member in static_member_list:
+            await client.send_message(message.channel, 'BEGONE THOT! <@' + member.id + '>')
+            await client.move_member(member, random.choice(voice_channels))
 
 @client.event
 async def on_ready():
