@@ -18,7 +18,9 @@ async def on_message(message):
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
 
-    my_name = ['pybot', 'Pybot', '<!489837711750987787>']
+    my_name = ['pybot', 'Pybot', '<@' + client.user.id + '>']
+
+    print('test' + message.content);
 
     if any(x in message.content for x in my_name):
         # switch statements are saved
