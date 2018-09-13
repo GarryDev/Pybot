@@ -1,6 +1,7 @@
 # Work with Python 3.6
 import discord
 import re
+from os import listdir
 
 TOKEN = 'NDg5ODM3NzExNzUwOTg3Nzg3.DnwkmA.uPRENdAZeB3eHUwCsw_rw4SyXKk'
 
@@ -26,13 +27,15 @@ async def on_message(message):
             result = re.search('thoughts on <@(.*)>', message.content)
             print(message.content)
             print(result.group(1))
-            await client.send_message(message.channel, "<@"  + result.group(1) + ">" + "is a cuck")
+            await client.send_message(message.channel, "<@"  + result.group(1) + ">" + " is a cuck")
         elif "anne" in message.content:
             try:
                 await client.send_file(message.channel, 'C:\\pybot\\anne_robinson.jpg')
             except ValueError:
-                print("Could not open C:\\pybot\\anne_robinson.jpg")
-            
+                print('Could not open C:\\pybot\\anne_robinson.jpg')
+        elif "hi" in message.content:
+            for file in listdir('C:\\pybot\\hi'):
+                await client.send_file(message.channel, 'C:\\pybot\\hi\\' + file)
 
 @client.event
 async def on_ready():
