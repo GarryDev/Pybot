@@ -4,6 +4,7 @@ import re
 from os import listdir
 
 TOKEN = 'NDg5ODM3NzExNzUwOTg3Nzg3.DnwkmA.uPRENdAZeB3eHUwCsw_rw4SyXKk'
+CLIENT_ID = '489837711750987787'
 
 client = discord.Client()
 
@@ -17,7 +18,7 @@ async def on_message(message):
         msg = 'Hello {0.author.mention}'.format(message)
         await client.send_message(message.channel, msg)
 
-    my_name = ['pybot', 'Pybot']
+    my_name = ['pybot', 'Pybot', '!489837711750987787']
 
     if any(x in message.content for x in my_name):
         # switch statements are saved
@@ -36,6 +37,9 @@ async def on_message(message):
         elif "hi" in message.content:
             for file in listdir('C:\\pybot\\hi'):
                 await client.send_file(message.channel, 'C:\\pybot\\hi\\' + file)
+        else:
+            client.send_message(message.channel, "What the fuck are you on about you absolute unit???")
+            print('Could not match responce to:\n' + message.content + '\n')
 
 @client.event
 async def on_ready():
