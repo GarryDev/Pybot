@@ -15,30 +15,32 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    msg = message.content
+
     my_name = ['pybot', 'Pybot', '<@' + client.user.id + '>']
 
-    if any(x in message.content for x in my_name):
+    if any(x in msg for x in my_name):
         # switch statements are saved
-        if "who is our lord" in message.content:
+        if "who is our lord" in msg:
             await client.send_message(message.channel, '{0.author.mention} OUR LORD AND SAVIOR IS CHIN-CHIN REEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE!!!!!!!!!!!!!'.format(message))
-        elif "thoughts on" in message.content:
-            result = re.search('thoughts on <@(.*)>', message.content)
+        elif "thoughts on" in msg:
+            result = re.search('thoughts on <@(.*)>', msg)
             await client.send_message(message.channel, "<@"  + result.group(1) + ">" + " is a cuck")
-        elif "anne" in message.content:
+        elif "anne" in msg:
             try:
                 await client.send_file(message.channel, 'C:\\pybot\\anne_robinson.jpg')
             except ValueError:
                 print('Could not open C:\\pybot\\anne_robinson.jpg')
-        elif "hi" in message.content:
+        elif "hi" in msg:
             for file in listdir('C:\\pybot\\hi'):
                 await client.send_file(message.channel, 'C:\\pybot\\hi\\' + file)
         else:
             await client.send_message(message.channel, 'What the fuck are you on about you absolute unit???')
-            print('Could not match responce to:\n' + message.content + '\n')
+            print('Could not match responce to:\n' + msg + '\n')
 
     immune = "155863164544614402", "175030721876852736"
 
-    if message.author.id in immune and "!scattertheweak" in message.content:
+    if message.author.id in immune and "!scattertheweak" in msg:
 
         voice_channels = []
 
@@ -55,6 +57,8 @@ async def on_message(message):
         for member in static_member_list:
             await client.send_message(message.channel, 'BEGONE THOT! <@' + member.id + '>')
             await client.move_member(member, random.choice(voice_channels))
+    if '!howdy' in msg:
+
 
 @client.event
 async def on_ready():
