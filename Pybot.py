@@ -154,7 +154,7 @@ def main():
                     await client.send_file(message.channel, home_dir + '\\' + 'hi' + '\\' + file)
             else:
                 await reply('What the fuck are you on about you absolute unit???')
-                print('Could not match responce to:\n' + msg + '\n')
+                print('Could not match response to:\n' + msg + '\n')
 
         if '!howdy' in msg:
             None
