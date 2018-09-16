@@ -81,7 +81,6 @@ def main():
             if '!admin ' in msg:
                 args = msg[7:len(msg)].split(' ')
                 if len(args) >= 1:
-
                     if args[0] == 'add':
                         if len(args) == 2:
                             if args[1][:3] == '<@!' and args[1][-1:] == '>':
@@ -96,7 +95,7 @@ def main():
                             else:
                                 await reply('wrong for format for id arg !admin add [id]')
                         else:
-                            await reply('unkown command !admin add ???')
+                            await reply('unknown command !admin add ???')
 
                     elif args[0] == 'remove':
                         if len(args) == 2:
@@ -113,10 +112,11 @@ def main():
                             else:
                                 await reply('wrong for format for id arg !admin add [id]')
                         else:
-                            await reply('unkown command !admin add ???')
+                            await reply('unknown command !admin add ???')
                     elif args[0] == 'list':
                         await reply(settings['admin_list'])
-                    else: await reply('unkown command !admin ???')
+                    else:
+                        await reply('unknown command !admin ???')
                 else: 
                     await reply('missing arg !admin [arg]')
 
