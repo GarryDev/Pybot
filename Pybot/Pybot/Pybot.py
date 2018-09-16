@@ -3,12 +3,13 @@ import discord
 import random
 import json
 import re
+import os
 from os import listdir, path
 from sys import exit
 
 settings = None
 admin_list = None
-home_dir = 'C:\\pybot\\'
+home_dir = os.path.dirname(os.path.realpath(__file__))
 config_file = home_dir + 'config.json'
 
 def main():
@@ -37,8 +38,10 @@ def main():
             if 'token' in settings:
                 if settings['token'] != '###':
                     TOKEN = settings['token']
-                else: exit(error_str.format('token'))
-            else: exit('\'token\' not found in json.')
+                else:
+                    exit(error_str.format('token'))
+            else:
+                exit('\'token\' not found in json.')
 
             if 'client_id' in settings:
                 if settings['client_id'] != '###':
