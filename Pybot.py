@@ -137,7 +137,6 @@ def main():
 
 
 
-
         if any(x in msg for x in my_name):
             # switch statements are saved
             if "who is our lord" in msg:
@@ -167,8 +166,11 @@ def main():
         print(client.user.name)
         print(client.user.id)
         print('------')
+        print("Current Admin List:-")
+        print(admin_list)
+        print('------')
 
     client.run(TOKEN)
 
 if __name__== "__main__":
-   main()
+    main()
