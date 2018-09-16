@@ -10,7 +10,7 @@ from sys import exit
 settings = None
 admin_list = None
 home_dir = os.path.dirname(os.path.realpath(__file__))
-config_file = home_dir + 'config.json'
+config_file = home_dir + "\\" + 'config.json'
 
 def main():
 
@@ -147,11 +147,11 @@ def main():
                 await reply("<@"  + result.group(1) + ">" + " is a cuck")
             elif "anne" in msg:
                 try:
-                    await client.send_file(message.channel, 'C:\\pybot\\anne_robinson.jpg')
+                    await client.send_file(message.channel, home_dir + "\\" + 'anne.jpg')
                 except ValueError:
-                    print('Could not open C:\\pybot\\anne_robinson.jpg')
+                    print('Could not open' + home_dir + 'anne.jpg')
             elif "hi" in msg:
-                for file in listdir('C:\\pybot\\hi'):
+                for file in listdir(home_dir + '\\' + 'hi'):
                     await client.send_file(message.channel, 'C:\\pybot\\hi\\' + file)
             else:
                 await reply('What the fuck are you on about you absolute unit???')
