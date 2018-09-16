@@ -3,18 +3,17 @@ import discord
 import random
 import json
 import re
+import os
 from os import listdir, path
 from sys import exit
 
 settings = None
 admin_list = None
-home_dir = 'C:\\pybot\\'
-config_file = home_dir + 'config.json'
+home_dir = os.path.dirname(os.path.realpath(__file__))
+config_file = home_dir + "\\" + 'config.json'
 
 def main():
-
     def init_config():
-
         settings =	{
         "token": '###',
         "client_id": '###',
@@ -37,25 +36,33 @@ def main():
             if 'token' in settings:
                 if settings['token'] != '###':
                     TOKEN = settings['token']
-                else: exit(error_str.format('token'))
-            else: exit('\'token\' not found in json.')
+                else:
+                    exit(error_str.format('token'))
+            else:
+                exit('\'token\' not found in json.')
 
             if 'client_id' in settings:
                 if settings['client_id'] != '###':
                     CLIENT_ID = settings['client_id']
-                else: exit(error_str.format('client_id'))
-            else: exit('\'client_id\' not found in json.')
+                else:
+                    exit(error_str.format('client_id'))
+            else:
+                exit('\'client_id\' not found in json.')
 
             if 'admin_list' in settings:
                 if settings['admin_list'] != '###':
                     admin_list = settings['admin_list']
-                else: exit(error_str.format('admin_list'))
-            else: exit('\'admin_list\' not found in json.')
+                else:
+                    exit(error_str.format('admin_list'))
+            else:
+                exit('\'admin_list\' not found in json.')
 
             client = discord.Client()
 
-        else: init_config()
-    else: init_config()
+        else:
+            init_config()
+    else:
+        init_config()
 
     @client.event
     async def on_message(message):
@@ -68,15 +75,12 @@ def main():
             return
 
         msg = message.content
-
         my_name = ['pybot', 'Pybot', '<@' + client.user.id + '>']
 
         if message.author.id in admin_list:
-
             if '!admin ' in msg:
                 args = msg[7:len(msg)].split(' ')
                 if len(args) >= 1:
-
                     if args[0] == 'add':
                         if len(args) == 2:
                             if args[1][:3] == '<@!' and args[1][-1:] == '>':
@@ -88,8 +92,10 @@ def main():
                                     with open(config_file, 'w') as fp:
                                         json.dump(settings, fp)
                                     await reply('Added successfully')
-                            else: await reply('wrong for format for id arg !admin add [id]')
-                        else: await reply('unkown command !admin add ???')
+                            else:
+                                await reply('wrong for format for id arg !admin add [id]')
+                        else:
+                            await reply('unknown command !admin add ???')
 
                     elif args[0] == 'remove':
                         if len(args) == 2:
@@ -103,21 +109,19 @@ def main():
                                     with open(config_file, 'w') as fp:
                                         json.dump(settings, fp)
                                     await reply('Removed successfully')
-                            else: await reply('wrong for format for id arg !admin add [id]')
-                        else: await reply('unkown command !admin add ???')
-
+                            else:
+                                await reply('wrong for format for id arg !admin add [id]')
+                        else:
+                            await reply('unknown command !admin add ???')
                     elif args[0] == 'list':
                         await reply(settings['admin_list'])
-
-                    else: await reply('unkown command !admin ???')
-
+                    else:
+                        await reply('unknown command !admin ???')
                 else: 
                     await reply('missing arg !admin [arg]')
 
             if '!scattertheweak' in msg:
-
                 voice_channels = []
-
                 for server in client.servers:
                     for channel in server.channels:
                         # categorys have channel type as a int where as text and voice are an set of string and int [name, value]
@@ -133,8 +137,6 @@ def main():
                     await client.move_member(member, random.choice(voice_channels))
 
 
-
-
         if any(x in msg for x in my_name):
             # switch statements are saved
             if "who is our lord" in msg:
@@ -144,15 +146,15 @@ def main():
                 await reply("<@"  + result.group(1) + ">" + " is a cuck")
             elif "anne" in msg:
                 try:
-                    await client.send_file(message.channel, 'C:\\pybot\\anne_robinson.jpg')
+                    await client.send_file(message.channel, home_dir + "\\" + 'anne.jpg')
                 except ValueError:
-                    print('Could not open C:\\pybot\\anne_robinson.jpg')
+                    print('Could not open' + home_dir + 'anne.jpg')
             elif "hi" in msg:
-                for file in listdir('C:\\pybot\\hi'):
-                    await client.send_file(message.channel, 'C:\\pybot\\hi\\' + file)
+                for file in listdir(home_dir + '\\' + 'hi'):
+                    await client.send_file(message.channel, home_dir + '\\' + 'hi' + '\\' + file)
             else:
                 await reply('What the fuck are you on about you absolute unit???')
-                print('Could not match responce to:\n' + msg + '\n')
+                print('Could not match response to:\n' + msg + '\n')
 
         if '!howdy' in msg:
             None
@@ -164,8 +166,11 @@ def main():
         print(client.user.name)
         print(client.user.id)
         print('------')
+        print("Current Admin List:-")
+        print(admin_list)
+        print('------')
 
     client.run(TOKEN)
 
 if __name__== "__main__":
-   main()
+    main()
