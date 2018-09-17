@@ -25,7 +25,6 @@ def main():
         os.mkdir(home_dir)
 
     if not path.exists(config_path):
-
         settings =	{
         "token": '###',
         "admin_list": []
