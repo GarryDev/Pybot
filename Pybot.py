@@ -7,32 +7,34 @@ import os
 from os import listdir, path
 from sys import exit
 
-settings = None
-admin_list = None
+settings = []
+admin_list = []
 home_dir = os.getenv('LOCALAPPDATA') + "\\pybot\\"
-config_file = home_dir + 'config.json'
+config_path = home_dir + 'config.json'
 
 def save_settings():
-    with open(config_file, 'w') as fp:
+    global settings
+
+    with open(config_path, 'w') as fp:
         json.dump(settings, fp)
 
 def main():
+    global settings
 
-    if(not (path.exists(home_dir) or path.exists(config_file))):
-        
-        # initialize settings folder and config file under local appdata
+    if not path.exists(home_dir): 
+        os.mkdir(home_dir)
+
+    if not path.exists(config_path):
 
         settings =	{
         "token": '###',
         "admin_list": []
         }
 
-        os.mkdir(home_dir)
-
-        with open(config_file, 'w+') as fp:
+        with open(config_path, 'w+') as fp:
             json.dump(settings, fp)
 
-    with open(config_file) as f:
+    with open(config_path) as f:
         settings = json.load(f)
 
     # error_str = 'Please give a valid value for \'{}\' in your ' + config_file + '.'
@@ -49,7 +51,10 @@ def main():
 
     if 'admin_list' not in settings:
         settings['admin_list'] = []
+        admin_list = []
         save_settings()
+    else: 
+        admin_list = settings['admin_list']
 
     client = discord.Client()
 
@@ -153,6 +158,8 @@ def main():
         print('Logged in as')
         print(client.user.name)
         print(client.user.id)
+        print('------')
+        print('config path: ' + config_path)
         print('------')
         print("Current Admin List:-")
         print(admin_list)
