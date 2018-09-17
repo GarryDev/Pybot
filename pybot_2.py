@@ -8,6 +8,7 @@ import json
 import re
 import os
 from sys import exit
+from random import randint
 from discord import Game
 from discord.ext import commands
 from discord.ext.commands import Bot
@@ -195,7 +196,7 @@ def main():
 
             # copy list so it will not be updated when a user is removed from the voice channel
             static_member_list = ctx.message.author.voice.voice_channel.voice_members.copy()
-
+            
             for member in static_member_list:
                 await bot.say('BEGONE THOT! <@' + member.id + '>')
                 await bot.move_member(member, random.choice(voice_channels))
@@ -205,13 +206,78 @@ def main():
     # async def test_on_error(ctx, error):
     #   await bot.send_message(error.message.channel, '!admin <add/remove> <@user>')
 
+    @bot.command(pass_context=True)
+    async def test(ctx, arg):
+
+        for x in range(1,10):
+            await asyncio.sleep(1)
+            await bot.say('{} second(s) have passed.'.format(x))
+
+        await bot.change_nickname(ctx.message.author, arg)
+        bot.say("done: " + ctx.message.author.nick)
+
+    @bot.command(pass_context=True)
+    async def ridethebus(ctx, arg):
+
+        print('member no: {}'.format(len(ctx.message.author.voice.voice_channel.voice_members)))
+
+        for x in range(0,20):
+            for member in ctx.message.author.voice.voice_channel.voice_members:
+
+                old_name = ''.join(str(member.display_name))
+
+                if(old_name == arg or old_name == 'Loki'):
+                    pass
+                else:
+                    await bot.change_nickname(member, arg)
+                    await asyncio.sleep(0.5)
+                    await bot.change_nickname(member, old_name)
+
+    @bot.command(pass_context=True)
+    async def icantspell(ctx):
+
+        vowels = 'aeiouaeiou'
+
+        for member in ctx.message.server.members:
+
+            correct_spelling = member.display_name
+
+            if correct_spelling != 'Loki':
+            
+                print('jumbling -> {}'.format(correct_spelling))
+
+                new_spelling = ''
+
+                for char in correct_spelling:
+
+                    rnd = randint(0,4)
+
+                    if(char in vowels):
+                        if char is 'a':
+                            new_spelling += vowels[rnd+1]
+                        elif char is 'e':
+                            new_spelling += vowels[rnd+2]
+                        elif char is 'i':
+                            new_spelling += vowels[rnd+3]
+                        elif char is 'o':
+                            new_spelling += vowels[rnd+4]
+                        elif char is 'u':
+                            new_spelling += vowels[rnd+5]
+                    else:
+                        new_spelling+= char
+
+                await bot.change_nickname(member, new_spelling)
+                print('result = {}'.format(new_spelling))
+
+
+
     async def list_servers():
         await bot.wait_until_ready()
         while not bot.is_closed:
             print("Current servers:")
             for server in bot.servers:
                 print(server.name)
-            await asyncio.sleep(600)
+            await asyncio.sleep(200)
 
     bot.loop.create_task(list_servers())
     bot.run(token)
