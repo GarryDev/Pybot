@@ -9,60 +9,49 @@ from sys import exit
 
 settings = None
 admin_list = None
-home_dir = os.path.dirname(os.path.realpath(__file__))
-config_file = home_dir + "\\" + 'config.json'
+home_dir = os.getenv('LOCALAPPDATA') + "\\pybot\\"
+config_file = home_dir + 'config.json'
+
+def save_settings():
+    with open(config_file, 'w') as fp:
+        json.dump(settings, fp)
 
 def main():
-    def init_config():
+
+    if(not (path.exists(home_dir) or path.exists(config_file))):
+        
+        # initialize settings folder and config file under local appdata
+
         settings =	{
         "token": '###',
-        "client_id": '###',
-        "admin_list": '###'
+        "admin_list": []
         }
+
+        os.mkdir(home_dir)
 
         with open(config_file, 'w+') as fp:
             json.dump(settings, fp)
 
-        exit('Please fill in blank values in ' + config_file + '.')
+    with open(config_file) as f:
+        settings = json.load(f)
 
-    if(path.exists(home_dir)):
-        if(path.exists(config_file)):
+    # error_str = 'Please give a valid value for \'{}\' in your ' + config_file + '.'
 
-            with open(config_file) as f:
-                settings = json.load(f)
-
-            error_str = 'Please give a valid value for \'{}\' in your ' + config_file + '.'
-
-            if 'token' in settings:
-                if settings['token'] != '###':
-                    TOKEN = settings['token']
-                else:
-                    exit(error_str.format('token'))
-            else:
-                exit('\'token\' not found in json.')
-
-            if 'client_id' in settings:
-                if settings['client_id'] != '###':
-                    CLIENT_ID = settings['client_id']
-                else:
-                    exit(error_str.format('client_id'))
-            else:
-                exit('\'client_id\' not found in json.')
-
-            if 'admin_list' in settings:
-                if settings['admin_list'] != '###':
-                    admin_list = settings['admin_list']
-                else:
-                    exit(error_str.format('admin_list'))
-            else:
-                exit('\'admin_list\' not found in json.')
-
-            client = discord.Client()
-
+    if 'token' in settings:
+        if settings['token'] != '###':
+            TOKEN = settings['token']
         else:
-            init_config()
+            TOKEN = input('Please enter your bot token: ')
+            settings['token'] = TOKEN
+            save_settings()
     else:
-        init_config()
+        exit('\'token\' not found in json.')
+
+    if 'admin_list' not in settings:
+        settings['admin_list'] = []
+        save_settings()
+
+    client = discord.Client()
 
     @client.event
     async def on_message(message):
@@ -89,8 +78,8 @@ def main():
                                     await reply('Already admin.')
                                 else:
                                     admin_list.append(id)
-                                    with open(config_file, 'w') as fp:
-                                        json.dump(settings, fp)
+                                    save_settings()
+                                        
                                     await reply('Added successfully')
                             else:
                                 await reply('wrong for format for id arg !admin add [id]')
@@ -106,8 +95,7 @@ def main():
                                 else:
                                     admin_list.remove(id)
                                     settings['admin_list'].remove(id)
-                                    with open(config_file, 'w') as fp:
-                                        json.dump(settings, fp)
+                                    save_settings()
                                     await reply('Removed successfully')
                             else:
                                 await reply('wrong for format for id arg !admin add [id]')
