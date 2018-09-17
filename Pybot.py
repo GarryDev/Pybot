@@ -7,6 +7,7 @@ import os
 from os import listdir, path
 from sys import exit
 
+
 settings = []
 admin_list = []
 home_dir = os.getenv('LOCALAPPDATA') + "\\pybot\\"
