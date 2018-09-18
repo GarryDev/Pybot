@@ -112,7 +112,7 @@ def main():
 
     @bot.event
     async def on_ready():
-        await bot.change_presence(game=Game(name="y'all cray cray"))
+        await bot.change_presence(game=Game(name="Nintendogs {3DS}"))
         print("Logged in as " + bot.user.name)
 
     @bot.command()
@@ -245,6 +245,7 @@ def main():
             if correct_spelling != 'Loki':
             
                 print('jumbling -> {}'.format(correct_spelling))
+                await bot.say('jumbling -> {}'.format(correct_spelling))
 
                 new_spelling = ''
 
@@ -268,8 +269,34 @@ def main():
 
                 await bot.change_nickname(member, new_spelling)
                 print('result = {}'.format(new_spelling))
+                await bot.say('result = {}'.format(new_spelling))
 
+    @bot.command(pass_context=True)
+    async def format_nic(ctx, arg):
 
+        formats =	{
+            "neg_squared":              (127344, False),
+            "circled_latin":            (9398,   False),
+            "negative_circled_latin":   (127323, False),
+            "mathematical_bold_fraktur":(120172, False)
+        }
+        
+        if arg in formats:
+            format = formats[arg]
+        else:
+            await bot.say('Requested format not supported. Run \'>format help\' for more options.')
+
+        new_name = ''
+
+        name = ctx.message.author.display_name
+
+        if format[1] is False
+            name.lower()
+
+        for char in name:
+            new_name += chr(ord(char) - 97 + format[0])
+        
+        await bot.change_nickname(ctx.message.author, new_name)
 
     async def list_servers():
         await bot.wait_until_ready()
