@@ -290,7 +290,7 @@ def main():
 
         name = ctx.message.author.display_name
 
-        if format[1] is False
+        if format[1] is False:
             name.lower()
 
         for char in name:
