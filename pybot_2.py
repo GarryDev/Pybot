@@ -18,7 +18,7 @@ logging.basicConfig(level=logging.INFO)
 BOT_PREFIX = ("?", ">")
 settings = []
 admin_list = []
-home_dir = os.getenv("LOCALAPPDATA") + "\\pybot\\"
+home_dir = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
 config_path = home_dir + "config.json"
 
 
@@ -131,17 +131,8 @@ def main():
 
     @bot.event
     async def on_ready():
-        await bot.change_presence(game=Game(name="Nintendogs {3DS}"))
+        await bot.change_presence(game=Game(name="Can spell better than Kieran."))
         print("Logged in as " + bot.user.name)
-
-    @bot.command()
-    async def bitcoin():
-        url = "https://api.coindesk.com/v1/bpi/currentprice/BTC.json"
-        async with aiohttp.ClientSession() as session:  # Async HTTP request
-            raw_response = await session.get(url)
-            response = await raw_response.text()
-            response = json.loads(response)
-            await bot.say("Bitcoin price is: $" + response["bpi"]["USD"]["rate"])
 
     # {0.author.mention}'.format(ctx.message)
 
@@ -258,7 +249,7 @@ def main():
                     await asyncio.sleep(0.5)
                     await bot.change_nickname(member, old_name)
 
-    @bot.command(pass_context=True)
+    @admin.command(pass_context=True)
     async def icantspell(ctx):
 
         vowels = "aeiouaeiou"
@@ -267,7 +258,7 @@ def main():
 
             correct_spelling = member.display_name
 
-            if correct_spelling != "Loki":
+            if correct_spelling != ["Loki", "Pybot"]:
 
                 print("jumbling -> {}".format(correct_spelling))
                 await bot.say("jumbling -> {}".format(correct_spelling))
