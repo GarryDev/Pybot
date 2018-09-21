@@ -258,7 +258,7 @@ def main():
 
             correct_spelling = member.display_name
 
-            if correct_spelling != ["Loki", "Pybot"]:
+            if correct_spelling != "Loki" or "PyBot":
 
                 print("jumbling -> {}".format(correct_spelling))
                 await bot.say("jumbling -> {}".format(correct_spelling))
