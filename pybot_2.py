@@ -18,9 +18,9 @@ logging.basicConfig(level=logging.INFO)
 BOT_PREFIX = ("?", ">")
 settings = []
 admin_list = []
+super_admins = []
 home_dir = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
 config_path = home_dir + "config.json"
-
 
 class NeedAdminPriv(Exception):
     pass
@@ -43,7 +43,7 @@ def save_settings():
 
 def main():
 
-    global settings
+    global settings, admin_list, super_admins
 
     if not os.path.exists(home_dir):
         os.mkdir(home_dir)
@@ -75,6 +75,13 @@ def main():
         save_settings()
     else:
         admin_list = settings["admin_list"]
+
+    if "super_admins" not in settings:
+        settings["super_admins"] = []
+        super_admins = ["155863164544614402"]
+        save_settings()
+    else:
+        super_admins = settings["super_admins"]
 
     bot = Bot(command_prefix=BOT_PREFIX)
 
@@ -136,6 +143,9 @@ def main():
 
     # {0.author.mention}'.format(ctx.message)
 
+    def is_valid_format(str):
+        return str[:3] == "<@!" and str[-1:] == ">"
+
     @bot.group(pass_context=True)
     async def admin(ctx):
 
@@ -146,9 +156,6 @@ def main():
 
         if ctx.invoked_subcommand is None:
             await bot.say("Invald usage, use !admin <add/remove> <@user>")
-
-    def is_valid_format(str):
-        return str[:3] == "<@!" and str[-1:] == ">"
 
     @admin.command(pass_context=True)
     async def add(ctx, arg):
@@ -184,6 +191,52 @@ def main():
                 await bot.say("{} was removed from admin list.".format(arg))
         else:
             await bot.say("Invald usage, use !admin remove <@user>")
+
+    @bot.group(pass_context=True)
+    async def superadmin(ctx):
+
+        print("superadmin(ctx)")
+
+        if ctx.message.author.id not in super_admins:
+            raise NeedAdminPriv("not superadmin")
+
+        if ctx.invoked_subcommand is None:
+            await bot.say("Invald usage, use !superadmin <add/remove> <@user>")
+
+    @superadmin.command(pass_context=True)
+    async def add(ctx, arg):
+        print("add(ctx, arg)")
+
+        if arg is None:
+            await bot.say("Invald usage, use !superadmin <add/remove> <@user>")
+        elif is_valid_format(arg):
+            id = strp_dcid(arg)
+
+            if id in super_admins:
+                await bot.say("Already superadmin.")
+            else:
+                super_admins.append(id)
+                save_settings()
+                await bot.say("{} was added to superadmin list.".format(arg))
+        else:
+            await bot.say("Invald usage, use !superadmin add <@user>")
+    
+    @superadmin.command(pass_context=True)
+    async def remove(ctx, arg):
+        print("remove(ctx, arg)")
+        if arg is None:
+            await bot.say("Missing argument use 'superadmin remove {@user}'")
+        elif is_valid_format(arg):
+            id = strp_dcid(arg)
+
+            if id not in super_admins:
+                await bot.say("superadmin not found.")
+            else:
+                super_admins.remove(id)
+                save_settings()
+                await bot.say("{} was removed from superadmin list.".format(arg))
+        else:
+            await bot.say("Invald usage, use !superadmin remove <@user>")
 
     @admin.command(pass_context=True)
     async def hello(ctx):
