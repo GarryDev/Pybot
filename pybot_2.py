@@ -22,6 +22,7 @@ super_admins = []
 home_dir = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
 config_path = home_dir + "config.json"
 
+
 class NeedAdminPriv(Exception):
     pass
 
@@ -220,7 +221,7 @@ def main():
                 await bot.say("{} was added to superadmin list.".format(arg))
         else:
             await bot.say("Invald usage, use !superadmin add <@user>")
-    
+
     @superadmin.command(pass_context=True)
     async def remove(ctx, arg):
         print("remove(ctx, arg)")
