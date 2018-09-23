@@ -156,7 +156,7 @@ def main():
         print("admin(ctx)")
 
         if ctx.message.author.id not in admin_list:
-            raise NeedAdminPriv("not admin")
+            raise NeedAdminPriv("You're not an admin you fuck.")
 
         if ctx.invoked_subcommand is None:
             await bot.say("Invalid usage, use >admin <add/remove> <@user>")
