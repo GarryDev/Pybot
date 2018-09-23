@@ -26,26 +26,48 @@ config_path = home_dir + "config.json"
 
 class NeedAdminPriv(Exception):
     pass
+<<<<<<< HEAD
 #region    - Misc Functions -
+=======
+
+
+# region     Misc Functions
+>>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 # Retrieves a copy of the voice members in the same channel as the author
 def copyLocalVMs(ctx):
     return copyLocalVMs(ctx)
 
+<<<<<<< HEAD
 #endregion  - Misc Functions -
 
 #region     - Discord Id Manipulation -
+=======
+
+# endregion  Misc Functions
+
+# region     -Discord Id Manipulation-
+
+>>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 def to_dcid(id):
     return "<@!" + id + ">"
 
+
 def strp_dcid(id):
     return id[3:-1]
+
 
 def is_valid_format(str):
     return str[:3] == "<@!" and str[-1:] == ">"
 
+<<<<<<< HEAD
 #endregion  - Discord Id Manipulation -
+=======
+
+# endregion  -Discord Id Manipulation-
+
+>>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 def save_settings():
     global settings
@@ -109,11 +131,11 @@ def main():
     print("Currently bound to text channels:-")
     print(bound_t_channels)
 
-    def in_channel(channel_id):
-        def predicate(ctx):
-            return ctx.message.channel.id == channel_id
+    # def in_channel(channel_id):
+    #    def predicate(ctx):
+    #        return ctx.message.channel.id == channel_id
 
-        return commands.check(predicate)
+    # return commands.check(predicate)
 
     bot = Bot(command_prefix=BOT_PREFIX)
 
@@ -268,9 +290,7 @@ def main():
                         voice_channels.append(channel)
 
             # copy list so it will not be updated when a user is removed from the voice channel
-            static_member_list = (
-                copyLocalVMs(ctx)
-            )
+            static_member_list = copyLocalVMs(ctx)
 
             for member in static_member_list:
                 await bot.say("BEGONE THOT! <@" + member.id + ">")
@@ -285,7 +305,7 @@ def main():
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
         current_voice_list = copyLocalVMs(ctx)
-        half_of_current_voice_list = int(round(len(current_voice_list) / 2))
+        half_of_current_voice_list = math.ceil(len(current_voice_list) / 2)
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
         snapped_channel = discord.utils.get(
             ctx.message.server.channels, name="The Soul Stone"
@@ -295,6 +315,11 @@ def main():
         await bot.say("**SNAP!**")
         for member in snapped_users:
             await bot.move_member(member, snapped_channel)
+
+        # await bot.say("!play https://www.youtube.com/watch?v=vJqA2fyMJQY")
+        # sleep(10)
+        # for member in snapped_users:
+        #    await bot.move_member(member, snapped_channel)
 
     # catch error locally
     # @add.error
