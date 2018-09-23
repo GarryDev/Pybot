@@ -291,7 +291,7 @@ def main():
 
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
-        current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
+        current_voice_list = copyLocalVMs(ctx)
         half_of_current_voice_list = math.ceil(len(current_voice_list) / 2)
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
         snapped_channel = discord.utils.get(
