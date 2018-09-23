@@ -12,6 +12,7 @@ from random import randint
 from discord import Game
 from discord.ext import commands
 from discord.ext.commands import Bot
+import discord.utils
 
 logging.basicConfig(level=logging.INFO)
 
@@ -273,7 +274,22 @@ def main():
 
         chosen_one = random.choice(current_voice_list)
         await bot.say("GET FUKT! <@" + chosen_one.id + ">")
-        await bot.kick(chosen_one)
+        print(type(current_voice_list))
+        # await bot.kick(chosen_one)
+
+    @superadmin.command(pass_context=True)
+    async def SNAP(ctx):
+        current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
+        half_of_current_voice_list = int(len(current_voice_list) / 2)
+        snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
+        snapped_channel = discord.utils.get(
+            server.channels, name="Snapped", type=ChannelType.text
+        )
+
+        await bot.say("You should have gone for the head.")
+        await bot.say("**SNAP!**")
+        for member in snapped_users:
+            await bot.move_member(member, snapped_channel)
 
     # catch error locally
     # @add.error
