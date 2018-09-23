@@ -267,6 +267,14 @@ def main():
                 await bot.say("BEGONE THOT! <@" + member.id + ">")
                 await bot.move_member(member, random.choice(voice_channels))
 
+    @superadmin.command(pass_context=True)
+    async def kickthecunt(ctx):
+        current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
+
+        chosen_one = random.choice(current_voice_list)
+        await bot.say("GET FUKT! <@" + chosen_one.id + ">")
+        await bot.kick(chosen_one)
+
     # catch error locally
     # @add.error
     # async def test_on_error(ctx, error):
