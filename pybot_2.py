@@ -19,7 +19,7 @@ logging.basicConfig(level=logging.INFO)
 BOT_PREFIX = ("?", ">")
 settings = []
 admin_list = []
-super_admins = []
+superadmin_list = []
 home_dir = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
 config_path = home_dir + "config.json"
 
@@ -45,13 +45,18 @@ def save_settings():
 
 def main():
 
-    global settings, admin_list, super_admins
+    global settings, admin_list, superadmin_list
 
     if not os.path.exists(home_dir):
         os.mkdir(home_dir)
 
     if not os.path.exists(config_path):
-        settings = {"token": "###", "admin_list": []}
+        settings = {
+            "token": "###",
+            "admin_list": [],
+            "superadmin_list": [],
+            "bound_t_channels": [],
+        }
 
         with open(config_path, "w+") as fp:
             json.dump(settings, fp)
@@ -78,33 +83,30 @@ def main():
     else:
         admin_list = settings["admin_list"]
 
-    if "super_admins" not in settings:
-        settings["super_admins"] = []
-        super_admins = ["155863164544614402"]
+    if "superadmin_list" not in settings:
+        settings["superadmin_list"] = []
+        superadmin_list = ["155863164544614402", "175030721876852736"]
         save_settings()
     else:
-        super_admins = settings["super_admins"]
+        superadmin_list = settings["superadmin_list"]
+
+    if "bound_t_channels" not in settings:
+        settings["bound_t_channels"] = []
+        bound_t_channels = ["403643650522873857"]
+        save_settings()
+    else:
+        bound_t_channels = settings["bound_t_channels"]
+
+    print("Currently bound to text channels:-")
+    print(bound_t_channels)
+
+    def in_channel(channel_id):
+        def predicate(ctx):
+            return ctx.message.channel.id == channel_id
+
+        return commands.check(predicate)
 
     bot = Bot(command_prefix=BOT_PREFIX)
-
-    @bot.command(
-        name="8ball",
-        description="Answers a yes/no question.",
-        brief="Answers from the beyond.",
-        aliases=["eight_ball", "eightball", "8-ball"],
-        pass_context=True,
-    )
-    async def eight_ball(context):
-        possible_responses = [
-            "That is a resounding no",
-            "It is not looking likely",
-            "Too hard to tell",
-            "It is quite possible",
-            "Definitely",
-        ]
-        await bot.say(
-            random.choice(possible_responses) + ", " + context.message.author.mention
-        )
 
     @bot.event
     async def on_command_error(error, ctx):
@@ -157,14 +159,14 @@ def main():
             raise NeedAdminPriv("not admin")
 
         if ctx.invoked_subcommand is None:
-            await bot.say("Invald usage, use !admin <add/remove> <@user>")
+            await bot.say("Invalid usage, use >admin <add/remove> <@user>")
 
     @admin.command(pass_context=True)
     async def add(ctx, arg):
         print("add(ctx, arg)")
 
         if arg is None:
-            await bot.say("Invald usage, use !admin <add/remove> <@user>")
+            await bot.say("Invalid usage, use >admin <add/remove> <@user>")
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
@@ -175,7 +177,7 @@ def main():
                 save_settings()
                 await bot.say("{} was added to admin list.".format(arg))
         else:
-            await bot.say("Invald usage, use !admin add <@user>")
+            await bot.say("Invalid usage, use >admin add <@user>")
 
     @admin.command(pass_context=True)
     async def remove(ctx, arg):
@@ -192,36 +194,36 @@ def main():
                 save_settings()
                 await bot.say("{} was removed from admin list.".format(arg))
         else:
-            await bot.say("Invald usage, use !admin remove <@user>")
+            await bot.say("Invalid usage, use >admin remove <@user>")
 
     @bot.group(pass_context=True)
     async def superadmin(ctx):
 
         print("superadmin(ctx)")
 
-        if ctx.message.author.id not in super_admins:
+        if ctx.message.author.id not in superadmin_list:
             raise NeedAdminPriv("not superadmin")
 
         if ctx.invoked_subcommand is None:
-            await bot.say("Invald usage, use !superadmin <add/remove> <@user>")
+            await bot.say("Invalid usage, use >superadmin <add/remove> <@user>")
 
     @superadmin.command(pass_context=True)
     async def add(ctx, arg):
         print("add(ctx, arg)")
 
         if arg is None:
-            await bot.say("Invald usage, use !superadmin <add/remove> <@user>")
+            await bot.say("Invalid usage, use >superadmin <add/remove> <@user>")
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id in super_admins:
+            if id in superadmin_list:
                 await bot.say("Already superadmin.")
             else:
-                super_admins.append(id)
+                superadmin_list.append(id)
                 save_settings()
                 await bot.say("{} was added to superadmin list.".format(arg))
         else:
-            await bot.say("Invald usage, use !superadmin add <@user>")
+            await bot.say("Invalid usage, use >superadmin add <@user>")
 
     @superadmin.command(pass_context=True)
     async def remove(ctx, arg):
@@ -231,14 +233,14 @@ def main():
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id not in super_admins:
+            if id not in superadmin_list:
                 await bot.say("superadmin not found.")
             else:
-                super_admins.remove(id)
+                superadmin_list.remove(id)
                 save_settings()
                 await bot.say("{} was removed from superadmin list.".format(arg))
         else:
-            await bot.say("Invald usage, use !superadmin remove <@user>")
+            await bot.say("Invalid usage, use >superadmin remove <@user>")
 
     @admin.command(pass_context=True)
     async def hello(ctx):
@@ -294,17 +296,7 @@ def main():
     # catch error locally
     # @add.error
     # async def test_on_error(ctx, error):
-    #   await bot.send_message(error.message.channel, '!admin <add/remove> <@user>')
-
-    @bot.command(pass_context=True)
-    async def test(ctx, arg):
-
-        for x in range(1, 10):
-            await asyncio.sleep(1)
-            await bot.say("{} second(s) have passed.".format(x))
-
-        await bot.change_nickname(ctx.message.author, arg)
-        bot.say("done: " + ctx.message.author.nick)
+    #   await bot.send_message(error.message.channel, '>admin <add/remove> <@user>')
 
     @bot.command(pass_context=True)
     async def ridethebus(ctx, arg):
