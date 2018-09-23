@@ -126,7 +126,7 @@ def main():
         elif isinstance(error, commands.CommandNotFound):
             await bot.send_message(
                 ctx.message.channel,
-                "What the fuck are you on about you absolute unit???",
+                "What the fuck are you on about, you absolute unit???",
             )
         elif isinstance(error, NeedAdminPriv):
             await bot.send_message(
@@ -135,7 +135,7 @@ def main():
             )
         else:
             await bot.send_message(
-                ctx.message.channel, "command error of type: {}".format(str(error))
+                ctx.message.channel, "Error caught. Type: {}".format(str(error))
             )
 
     @bot.event
