@@ -282,9 +282,7 @@ def main():
         current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
         half_of_current_voice_list = int(len(current_voice_list) / 2)
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
-        snapped_channel = discord.utils.get(
-            server.channels, name="Snapped", type=ChannelType.text
-        )
+        snapped_channel = discord.utils.get(ctx.message.server.channels, name="Snapped")
 
         await bot.say("You should have gone for the head.")
         await bot.say("**SNAP!**")
