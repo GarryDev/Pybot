@@ -283,7 +283,7 @@ def main():
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
         current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
-        half_of_current_voice_list = int(round(len(current_voice_list) / 2))
+        half_of_current_voice_list = math.ceil(len(current_voice_list) / 2)
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
         snapped_channel = discord.utils.get(
             ctx.message.server.channels, name="The Soul Stone"
@@ -293,6 +293,11 @@ def main():
         await bot.say("**SNAP!**")
         for member in snapped_users:
             await bot.move_member(member, snapped_channel)
+
+        # await bot.say("!play https://www.youtube.com/watch?v=vJqA2fyMJQY")
+        # sleep(10)
+        # for member in snapped_users:
+        #    await bot.move_member(member, snapped_channel)
 
     # catch error locally
     # @add.error
