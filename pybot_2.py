@@ -118,9 +118,9 @@ def main():
     print("Currently bound to text channels:-")
     print(bound_t_channels)
 
-    def in_channel(channel_id):
-        def predicate(ctx):
-            return ctx.message.channel.id == channel_id
+    #def in_channel(channel_id):
+    #    def predicate(ctx):
+    #        return ctx.message.channel.id == channel_id
 
         return commands.check(predicate)
 
