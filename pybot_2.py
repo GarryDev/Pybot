@@ -29,12 +29,31 @@ class NeedAdminPriv(Exception):
     pass
 
 
+# region     Misc Functions
+
+# Retrieves a copy of the voice members in the same channel as the author
+def copyLocalVMs(ctx):
+    return copyLocalVMs(ctx)
+
+
+# endregion  Misc Functions
+
+# region     -Discord Id Manipulation-
+
+
 def to_dcid(id):
     return "<@!" + id + ">"
 
 
 def strp_dcid(id):
     return id[3:-1]
+
+
+def is_valid_format(str):
+    return str[:3] == "<@!" and str[-1:] == ">"
+
+
+# endregion  -Discord Id Manipulation-
 
 
 def save_settings():
@@ -64,8 +83,6 @@ def main():
 
     with open(config_path) as f:
         settings = json.load(f)
-
-    # error_str = 'Please give a valid value for \'{}\' in your ' + config_file + '.'
 
     if "token" in settings:
         if settings["token"] != "###":
@@ -147,9 +164,6 @@ def main():
         print("Logged in as " + bot.user.name)
 
     # {0.author.mention}'.format(ctx.message)
-
-    def is_valid_format(str):
-        return str[:3] == "<@!" and str[-1:] == ">"
 
     @bot.group(pass_context=True)
     async def admin(ctx):
@@ -263,9 +277,7 @@ def main():
                         voice_channels.append(channel)
 
             # copy list so it will not be updated when a user is removed from the voice channel
-            static_member_list = (
-                ctx.message.author.voice.voice_channel.voice_members.copy()
-            )
+            static_member_list = copyLocalVMs(ctx)
 
             for member in static_member_list:
                 await bot.say("BEGONE THOT! <@" + member.id + ">")
@@ -273,11 +285,8 @@ def main():
 
     @superadmin.command(pass_context=True)
     async def kickthecunt(ctx):
-        current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
-
-        chosen_one = random.choice(current_voice_list)
+        chosen_one = random.choice(copyLocalVMs(ctx))
         await bot.say("GET FUKT! <@" + chosen_one.id + ">")
-        print(type(current_voice_list))
         await bot.kick(chosen_one)
 
     @superadmin.command(pass_context=True)
