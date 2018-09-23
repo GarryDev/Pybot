@@ -7,6 +7,7 @@ import random
 import json
 import re
 import os
+import math
 from sys import exit
 from random import randint
 from discord import Game
@@ -282,7 +283,7 @@ def main():
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
         current_voice_list = ctx.message.author.voice.voice_channel.voice_members.copy()
-        half_of_current_voice_list = int(len(current_voice_list) / 2)
+        half_of_current_voice_list = int(round(len(current_voice_list) / 2))
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
         snapped_channel = discord.utils.get(
             ctx.message.server.channels, name="The Soul Stone"
