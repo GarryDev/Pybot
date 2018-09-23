@@ -10,7 +10,6 @@ import os
 import math
 from sys import exit
 from random import randint
-from discord import Game
 from discord.ext import commands
 from discord.ext.commands import Bot
 import discord.utils
@@ -27,15 +26,15 @@ config_path = home_dir + "config.json"
 
 class NeedAdminPriv(Exception):
     pass
-#region     Misc Functions
+#region    - Misc Functions -
 
 # Retrieves a copy of the voice members in the same channel as the author
 def copyLocalVMs(ctx):
     return copyLocalVMs(ctx)
 
-#endregion  Misc Functions
+#endregion  - Misc Functions -
 
-#region     -Discord Id Manipulation-
+#region     - Discord Id Manipulation -
 
 def to_dcid(id):
     return "<@!" + id + ">"
@@ -46,7 +45,7 @@ def strp_dcid(id):
 def is_valid_format(str):
     return str[:3] == "<@!" and str[-1:] == ">"
 
-#endregion  -Discord Id Manipulation-
+#endregion  - Discord Id Manipulation -
 
 def save_settings():
     global settings
@@ -149,10 +148,10 @@ def main():
             await bot.send_message(
                 ctx.message.channel, "Error caught. Type: {}".format(str(error))
             )
-
+    
     @bot.event
     async def on_ready():
-        await bot.change_presence(game=Game(name="Can spell better than Kieran."))
+        await bot.change_presence(game=discord.Game(name="Can spell better than Kieran."))
         print("Logged in as " + bot.user.name)
 
     # {0.author.mention}'.format(ctx.message)
