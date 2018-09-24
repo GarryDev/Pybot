@@ -26,29 +26,17 @@ config_path = home_dir + "config.json"
 
 class NeedAdminPriv(Exception):
     pass
-<<<<<<< HEAD
 #region    - Misc Functions -
-=======
-
-
-# region     Misc Functions
->>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 # Retrieves a copy of the voice members in the same channel as the author
 def copyLocalVMs(ctx):
     return copyLocalVMs(ctx)
 
-<<<<<<< HEAD
-#endregion  - Misc Functions -
-
-#region     - Discord Id Manipulation -
-=======
 
 # endregion  Misc Functions
 
 # region     -Discord Id Manipulation-
 
->>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 def to_dcid(id):
     return "<@!" + id + ">"
@@ -61,13 +49,9 @@ def strp_dcid(id):
 def is_valid_format(str):
     return str[:3] == "<@!" and str[-1:] == ">"
 
-<<<<<<< HEAD
-#endregion  - Discord Id Manipulation -
-=======
 
 # endregion  -Discord Id Manipulation-
 
->>>>>>> 32895f002452f499d8cf557626b4d1c7f5448af3
 
 def save_settings():
     global settings
