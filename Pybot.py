@@ -279,13 +279,12 @@ def main():
             static_member_list = copy_local_vms(ctx)
 
             for member in static_member_list:
-                await bot.say("BEGONE THOT! {}".format(to_dcid(chosen_one.id)))
+                await bot.say("BEGONE THOT! {}".format(to_dcid(member.id)))
                 await bot.move_member(member, random.choice(voice_channels))
 
     @superadmin.command(pass_context=True)
     async def kickthecunt(ctx):
-        chosen_one = random.choice(copy_local_vms(ctx))
-        await bot.say("GET FUKT! {}".format(to_dcid(chosen_one.id)))
+        await bot.say("GET FUKT! {}".format(to_dcid(random.choice(copy_local_vms(ctx)).id)))
         await bot.kick(chosen_one)
 
     @superadmin.command(pass_context=True)
@@ -300,7 +299,7 @@ def main():
         await bot.say("You should have gone for the head.")
         await bot.say("**SNAP!**")
         for member in snapped_users:
-            await bot.move_member(member, snapped_channel)
+            await bot.move_member(member, snapped_channel))
 
     @bot.command(pass_context=True)
     async def ridethebus(ctx, arg):
