@@ -26,11 +26,14 @@ CONFIG_PATH = HOME_DIR + "config.json"
 
 class NeedAdminPriv(Exception):
     pass
-#region    - Misc Functions -
+
+
+# region    - Misc Functions -
 
 # Retrieves a copy of the voice members in the same channel as the author
 def copy_local_vms(ctx):
     return ctx.message.author.voice.voice_channel.voice_members.copy()
+
 
 # endregion  Misc Functions
 
@@ -155,10 +158,12 @@ def main():
             await bot.send_message(
                 ctx.message.channel, "Error caught. Type: {}".format(str(error))
             )
-    
+
     @bot.event
     async def on_ready():
-        await bot.change_presence(game=discord.Game(name="Can spell better than Kieran."))
+        await bot.change_presence(
+            game=discord.Game(name="Can spell better than Kieran.")
+        )
         print("Logged in as " + bot.user.name)
 
     # {0.author.mention}'.format(ctx.message)
@@ -285,29 +290,17 @@ def main():
 
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
-
-        print("trying to snap...")
-
-        await bot.say("trying to snap...")
-
-        print("0")
         current_voice_list = copy_local_vms(ctx)
-        print("1")
         half_of_current_voice_list = math.ceil(len(current_voice_list) / 2)
-        print("2")
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
-        print("3")
         snapped_channel = discord.utils.get(
             ctx.message.server.channels, name="The Soul Stone"
         )
-        print("5")
 
         await bot.say("You should have gone for the head.")
         await bot.say("**SNAP!**")
         for member in snapped_users:
             await bot.move_member(member, snapped_channel)
-
-        await bot.say("snap finished.")
 
     @bot.command(pass_context=True)
     async def ridethebus(ctx, arg):
