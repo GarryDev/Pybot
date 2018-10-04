@@ -17,11 +17,11 @@ import discord.utils
 logging.basicConfig(level=logging.INFO)
 
 BOT_PREFIX = ("?", ">")
-settings = []
-admin_list = []
-superadmin_list = []
-home_dir = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
-config_path = home_dir + "config.json"
+SETTINGS = []
+ADMIN_LIST = []
+SUPER_ADMIN_LIST = []
+HOME_DIR = os.getenv("LOCALAPPDATA") + "\\PyBot\\"
+CONFIG_PATH = HOME_DIR + "config.json"
 
 
 class NeedAdminPriv(Exception):
@@ -29,9 +29,8 @@ class NeedAdminPriv(Exception):
 #region    - Misc Functions -
 
 # Retrieves a copy of the voice members in the same channel as the author
-def copyLocalVMs(ctx):
-    return copyLocalVMs(ctx)
-
+def copy_local_vms(ctx):
+    return ctx.message.author.voice.voice_channel.voice_members.copy()
 
 # endregion  Misc Functions
 
@@ -54,63 +53,65 @@ def is_valid_format(str):
 
 
 def save_settings():
-    global settings
+    global SETTINGS
 
-    with open(config_path, "w") as fp:
-        json.dump(settings, fp)
+    with open(CONFIG_PATH, "w") as fp:
+        json.dump(SETTINGS, fp)
 
 
 def main():
 
-    global settings, admin_list, superadmin_list
+    global SETTINGS, ADMIN_LIST, SUPER_ADMIN_LIST
 
-    if not os.path.exists(home_dir):
-        os.mkdir(home_dir)
+    if not os.path.exists(HOME_DIR):
+        os.mkdir(HOME_DIR)
 
-    if not os.path.exists(config_path):
-        settings = {
+    if not os.path.exists(CONFIG_PATH):
+        SETTINGS = {
             "token": "###",
             "admin_list": [],
-            "superadmin_list": [],
+            "super_admin_list": [],
             "bound_t_channels": [],
         }
 
-        with open(config_path, "w+") as fp:
-            json.dump(settings, fp)
+        with open(CONFIG_PATH, "w+") as fp:
+            json.dump(SETTINGS, fp)
 
-    with open(config_path) as f:
-        settings = json.load(f)
+    with open(CONFIG_PATH) as f:
+        SETTINGS = json.load(f)
 
-    if "token" in settings:
-        if settings["token"] != "###":
-            token = settings["token"]
+    if "token" in SETTINGS:
+        if SETTINGS["token"] != "###":
+            token = SETTINGS["token"]
         else:
             token = input("Please enter your bot token: ")
-            settings["token"] = token
+            SETTINGS["token"] = token
             save_settings()
     else:
         exit("'token' not found in json.")
 
-    if "admin_list" not in settings:
-        settings["admin_list"] = []
-        admin_list = []
+    if "admin_list" not in SETTINGS:
+        SETTINGS["admin_list"] = []
+        ADMIN_LIST = []
         save_settings()
     else:
-        admin_list = settings["admin_list"]
+        ADMIN_LIST = SETTINGS["admin_list"]
 
-    if "superadmin_list" not in settings:
-        settings["superadmin_list"] = []
-        superadmin_list = ["155863164544614402", "175030721876852736"]
+    if "super_admin_list" not in SETTINGS:
+        SETTINGS["super_admin_list"] = []
+        SUPER_ADMIN_LIST = ["155863164544614402", "175030721876852736"]
         save_settings()
+        print("superadmin list not found")
     else:
-        superadmin_list = settings["superadmin_list"]
+        SUPER_ADMIN_LIST = SETTINGS["super_admin_list"]
+        print("set super admin list")
 
-    if "bound_t_channels" not in settings:
-        settings["bound_t_channels"] = []
+    if "bound_t_channels" not in SETTINGS:
+        SETTINGS["bound_t_channels"] = []
         bound_t_channels = ["403643650522873857"]
         save_settings()
     else:
-        bound_t_channels = settings["bound_t_channels"]
+        bound_t_channels = SETTINGS["bound_t_channels"]
 
     print("Currently bound to text channels:-")
     print(bound_t_channels)
@@ -167,7 +168,7 @@ def main():
 
         print("admin(ctx)")
 
-        if ctx.message.author.id not in admin_list:
+        if ctx.message.author.id not in ADMIN_LIST:
             raise NeedAdminPriv("You're not an admin you fuck.")
 
         if ctx.invoked_subcommand is None:
@@ -182,10 +183,10 @@ def main():
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id in admin_list:
+            if id in ADMIN_LIST:
                 await bot.say("Already admin.")
             else:
-                admin_list.append(id)
+                ADMIN_LIST.append(id)
                 save_settings()
                 await bot.say("{} was added to admin list.".format(arg))
         else:
@@ -199,10 +200,10 @@ def main():
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id not in admin_list:
+            if id not in ADMIN_LIST:
                 await bot.say("Admin not found.")
             else:
-                admin_list.remove(id)
+                ADMIN_LIST.remove(id)
                 save_settings()
                 await bot.say("{} was removed from admin list.".format(arg))
         else:
@@ -213,7 +214,7 @@ def main():
 
         print("superadmin(ctx)")
 
-        if ctx.message.author.id not in superadmin_list:
+        if ctx.message.author.id not in SUPER_ADMIN_LIST:
             raise NeedAdminPriv("not superadmin")
 
         if ctx.invoked_subcommand is None:
@@ -228,10 +229,10 @@ def main():
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id in superadmin_list:
+            if id in SUPER_ADMIN_LIST:
                 await bot.say("Already superadmin.")
             else:
-                superadmin_list.append(id)
+                SUPER_ADMIN_LIST.append(id)
                 save_settings()
                 await bot.say("{} was added to superadmin list.".format(arg))
         else:
@@ -245,23 +246,19 @@ def main():
         elif is_valid_format(arg):
             id = strp_dcid(arg)
 
-            if id not in superadmin_list:
+            if id not in SUPER_ADMIN_LIST:
                 await bot.say("superadmin not found.")
             else:
-                superadmin_list.remove(id)
+                SUPER_ADMIN_LIST.remove(id)
                 save_settings()
                 await bot.say("{} was removed from superadmin list.".format(arg))
         else:
             await bot.say("Invalid usage, use >superadmin remove <@user>")
 
     @admin.command(pass_context=True)
-    async def hello(ctx):
-        await bot.say("hello admin!")
-
-    @admin.command(pass_context=True)
     async def list(ctx):
-        for admin in admin_list:
-            await bot.say("hello admin!")
+        for admin in ADMIN_LIST:
+            await bot.say(to_dcid(admin))
 
     @admin.command(pass_context=True)
     async def scattertheweak(ctx):
@@ -274,7 +271,7 @@ def main():
                         voice_channels.append(channel)
 
             # copy list so it will not be updated when a user is removed from the voice channel
-            static_member_list = copyLocalVMs(ctx)
+            static_member_list = copy_local_vms(ctx)
 
             for member in static_member_list:
                 await bot.say("BEGONE THOT! <@" + member.id + ">")
@@ -282,23 +279,35 @@ def main():
 
     @superadmin.command(pass_context=True)
     async def kickthecunt(ctx):
-        chosen_one = random.choice(copyLocalVMs(ctx))
+        chosen_one = random.choice(copy_local_vms(ctx))
         await bot.say("GET FUKT! <@" + chosen_one.id + ">")
         await bot.kick(chosen_one)
 
     @superadmin.command(pass_context=True)
     async def SNAP(ctx):
-        current_voice_list = copyLocalVMs(ctx)
+
+        print("trying to snap...")
+
+        await bot.say("trying to snap...")
+
+        print("0")
+        current_voice_list = copy_local_vms(ctx)
+        print("1")
         half_of_current_voice_list = math.ceil(len(current_voice_list) / 2)
+        print("2")
         snapped_users = random.sample(current_voice_list, half_of_current_voice_list)
+        print("3")
         snapped_channel = discord.utils.get(
             ctx.message.server.channels, name="The Soul Stone"
         )
+        print("5")
 
         await bot.say("You should have gone for the head.")
         await bot.say("**SNAP!**")
         for member in snapped_users:
             await bot.move_member(member, snapped_channel)
+
+        await bot.say("snap finished.")
 
     @bot.command(pass_context=True)
     async def ridethebus(ctx, arg):
