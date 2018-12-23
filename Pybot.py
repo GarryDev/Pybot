@@ -284,7 +284,9 @@ def main():
 
     @superadmin.command(pass_context=True)
     async def kickthecunt(ctx):
-        await bot.say("GET FUKT! {}".format(to_dcid(random.choice(copy_local_vms(ctx)).id)))
+        await bot.say(
+            "GET FUKT! {}".format(to_dcid(random.choice(copy_local_vms(ctx)).id))
+        )
         await bot.kick(chosen_one)
 
     @superadmin.command(pass_context=True)
@@ -299,7 +301,7 @@ def main():
         await bot.say("You should have gone for the head.")
         await bot.say("**SNAP!**")
         for member in snapped_users:
-            await bot.move_member(member, snapped_channel))
+            await bot.move_member(member, snapped_channel)
 
     @bot.command(pass_context=True)
     async def ridethebus(ctx, arg):
